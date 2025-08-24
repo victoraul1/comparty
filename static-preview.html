@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparty - Las mejores fotos de tu evento, seleccionadas con IA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .gradient-text {
+            background: linear-gradient(to right, #2563eb, #9333ea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .hero-background {
+            background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.4)), url('./public/images/background_1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .hero-overlay {
+            background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,1) 100%);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Hero Section with Background Image -->
+    <section class="relative overflow-hidden hero-background">
+        <div class="relative z-10 mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
+            <div class="mx-auto max-w-2xl text-center bg-white/90 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/50">
+                <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+                    Las mejores fotos de tu evento,
+                    <span class="gradient-text">seleccionadas con IA</span>
+                </h1>
+                <p class="mt-6 text-lg leading-8 text-gray-600">
+                    Invita a tus invitados a subir fotos. Comparty selecciona automáticamente 
+                    las mejores 5 de cada uno usando inteligencia artificial GPT-4. Sin esfuerzo, 
+                    sin desorden, solo momentos memorables.
+                </p>
+                <div class="mt-10 flex items-center justify-center gap-x-6">
+                    <a href="#planes" class="rounded-md bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-500">
+                        Crear mi primer evento
+                    </a>
+                    <a href="#como-funciona" class="text-sm font-semibold leading-6 text-gray-900">
+                        ¿Cómo funciona? →
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="hero-overlay absolute inset-x-0 bottom-0 h-32"></div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-24 sm:py-32">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+            <div class="mx-auto max-w-2xl text-center">
+                <h2 class="text-base font-semibold leading-7 text-blue-600">
+                    Tecnología avanzada
+                </h2>
+                <p class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                    Todo lo que necesitas para un álbum perfecto
+                </p>
+            </div>
+            
+            <div class="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
+                <div class="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3">
+                    <div class="flex flex-col">
+                        <dt class="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
+                            <svg class="h-5 w-5 flex-none text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                            </svg>
+                            Selección con IA GPT-4
+                        </dt>
+                        <dd class="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
+                            <p class="flex-auto">
+                                Nuestro sistema analiza composición, emociones, nitidez y relevancia 
+                                para elegir las mejores 5 fotos de cada invitado automáticamente.
+                            </p>
+                        </dd>
+                    </div>
+                    
+                    <div class="flex flex-col">
+                        <dt class="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
+                            <svg class="h-5 w-5 flex-none text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                            </svg>
+                            Colaboración sencilla
+                        </dt>
+                        <dd class="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
+                            <p class="flex-auto">
+                                Envía un simple link a tus invitados. No necesitan registrarse, 
+                                solo subir sus fotos durante la ventana de tiempo que definas.
+                            </p>
+                        </dd>
+                    </div>
+                    
+                    <div class="flex flex-col">
+                        <dt class="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
+                            <svg class="h-5 w-5 flex-none text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                            </svg>
+                            Privacidad garantizada
+                        </dt>
+                        <dd class="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
+                            <p class="flex-auto">
+                                Marca de agua automática, eliminación de datos EXIF y control 
+                                total sobre quién puede ver y descargar las fotos.
+                            </p>
+                        </dd>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it Works -->
+    <section id="como-funciona" class="bg-white py-24 sm:py-32">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+            <div class="mx-auto max-w-2xl text-center">
+                <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                    Tan simple como 1, 2, 3
+                </h2>
+                <p class="mt-4 text-lg text-gray-600">
+                    Crea álbumes memorables sin el trabajo tedioso
+                </p>
+            </div>
+            
+            <div class="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">
+                <div class="grid max-w-xl grid-cols-1 gap-y-10 gap-x-8 lg:max-w-none lg:grid-cols-3 lg:gap-y-16">
+                    <div class="relative pl-16">
+                        <dt class="text-base font-semibold leading-7 text-gray-900">
+                            <div class="absolute top-0 left-0 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600">
+                                <span class="text-white font-bold">1</span>
+                            </div>
+                            Crea tu evento
+                        </dt>
+                        <dd class="mt-2 text-base leading-7 text-gray-600">
+                            Elige un plan, configura tu evento y genera links de invitación únicos.
+                        </dd>
+                    </div>
+                    
+                    <div class="relative pl-16">
+                        <dt class="text-base font-semibold leading-7 text-gray-900">
+                            <div class="absolute top-0 left-0 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600">
+                                <span class="text-white font-bold">2</span>
+                            </div>
+                            Invitados suben fotos
+                        </dt>
+                        <dd class="mt-2 text-base leading-7 text-gray-600">
+                            Comparte el link con tus invitados. Ellos suben sus fotos sin registro.
+                        </dd>
+                    </div>
+                    
+                    <div class="relative pl-16">
+                        <dt class="text-base font-semibold leading-7 text-gray-900">
+                            <div class="absolute top-0 left-0 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600">
+                                <span class="text-white font-bold">3</span>
+                            </div>
+                            IA selecciona lo mejor
+                        </dt>
+                        <dd class="mt-2 text-base leading-7 text-gray-600">
+                            Nuestra IA analiza y elige las mejores 5 fotos de cada invitado. Tú moderas y compartes.
+                        </dd>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="planes" class="bg-gray-50 py-12">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                    Elige el plan perfecto para tu evento
+                </h2>
+                <p class="mt-4 text-lg text-gray-600">
+                    Todos los planes incluyen selección automática y marca de agua
+                </p>
+            </div>
+
+            <div class="mt-12 grid gap-8 lg:grid-cols-4">
+                <!-- Plan Gratis -->
+                <div class="relative rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
+                    <div class="text-center">
+                        <h3 class="text-lg font-semibold text-gray-900">Gratis</h3>
+                        <div class="mt-4 flex items-baseline justify-center">
+                            <span class="text-5xl font-bold tracking-tight text-gray-900">$0</span>
+                        </div>
+                    </div>
+                    <ul class="mt-8 space-y-4">
+                        <li>✓ Hasta 2 invitados</li>
+                        <li>✓ Álbum activo por 1 mes</li>
+                        <li>✓ 7 días para subir fotos</li>
+                        <li>✓ Selección automática Top-5</li>
+                        <li>✗ Sin análisis con IA</li>
+                    </ul>
+                    <button class="mt-8 w-full rounded-lg bg-gray-900 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-800">
+                        Seleccionar Plan
+                    </button>
+                </div>
+
+                <!-- Plan Básico -->
+                <div class="relative rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
+                    <div class="text-center">
+                        <h3 class="text-lg font-semibold text-gray-900">Básico</h3>
+                        <div class="mt-4 flex items-baseline justify-center">
+                            <span class="text-5xl font-bold tracking-tight text-gray-900">$50</span>
+                            <span class="ml-1 text-xl text-gray-500">/evento</span>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-500">Extensiones: $10/mes</p>
+                    </div>
+                    <ul class="mt-8 space-y-4">
+                        <li>✓ Hasta 5 invitados</li>
+                        <li>✓ Álbum activo por 2 meses</li>
+                        <li>✓ 14 días para subir fotos</li>
+                        <li>✓ Selección automática Top-5</li>
+                        <li>✓ Descarga pack de fotos</li>
+                        <li>✗ Sin análisis con IA</li>
+                    </ul>
+                    <button class="mt-8 w-full rounded-lg bg-gray-900 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-800">
+                        Seleccionar Plan
+                    </button>
+                </div>
+
+                <!-- Plan Estándar (Más Popular) -->
+                <div class="relative rounded-2xl border-2 border-blue-600 bg-white p-8 shadow-sm ring-2 ring-blue-600">
+                    <div class="absolute -top-5 left-0 right-0 mx-auto w-fit rounded-full gradient-bg px-3 py-1 text-sm font-medium text-white">
+                        Más Popular
+                    </div>
+                    <div class="text-center">
+                        <h3 class="text-lg font-semibold text-gray-900">Estándar</h3>
+                        <div class="mt-4 flex items-baseline justify-center">
+                            <span class="text-5xl font-bold tracking-tight text-gray-900">$100</span>
+                            <span class="ml-1 text-xl text-gray-500">/evento</span>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-500">Extensiones: $10/mes</p>
+                    </div>
+                    <ul class="mt-8 space-y-4">
+                        <li>✓ Hasta 10 invitados</li>
+                        <li>✓ Álbum activo por 3 meses</li>
+                        <li>✓ 21 días para subir fotos</li>
+                        <li>✓ Selección automática Top-5</li>
+                        <li>✓ Descarga pack de fotos</li>
+                        <li class="font-semibold text-purple-600">✨ Análisis con IA GPT-4</li>
+                    </ul>
+                    <button class="mt-8 w-full rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700">
+                        Seleccionar Plan
+                    </button>
+                </div>
+
+                <!-- Plan Premium -->
+                <div class="relative rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
+                    <div class="text-center">
+                        <h3 class="text-lg font-semibold text-gray-900">Premium</h3>
+                        <div class="mt-4 flex items-baseline justify-center">
+                            <span class="text-5xl font-bold tracking-tight text-gray-900">$200</span>
+                            <span class="ml-1 text-xl text-gray-500">/evento</span>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-500">Extensiones: $10/mes</p>
+                    </div>
+                    <ul class="mt-8 space-y-4">
+                        <li>✓ Hasta 20 invitados</li>
+                        <li>✓ Álbum activo por 6 meses</li>
+                        <li>✓ 30 días para subir fotos</li>
+                        <li>✓ Selección automática Top-5</li>
+                        <li>✓ Descarga pack de fotos</li>
+                        <li class="font-semibold text-purple-600">✨ Análisis con IA GPT-4</li>
+                        <li>✓ Marca de agua personalizada</li>
+                        <li>✓ Soporte para videos (pronto)</li>
+                    </ul>
+                    <button class="mt-8 w-full rounded-lg bg-gray-900 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-800">
+                        Seleccionar Plan
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="relative bg-blue-600 overflow-hidden">
+        <div class="absolute inset-0 opacity-40 mix-blend-multiply">
+            <div style="background-image: url('./public/images/background_1.jpg'); background-size: cover; background-position: center;" class="w-full h-full"></div>
+        </div>
+        <div class="relative z-10 px-6 py-24 sm:px-6 sm:py-32 lg:px-8">
+            <div class="mx-auto max-w-2xl text-center">
+                <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                    ¿Listo para crear tu primer álbum inteligente?
+                </h2>
+                <p class="mx-auto mt-6 max-w-xl text-lg leading-8 text-blue-100">
+                    Únete a miles de hosts que ya confían en Comparty para capturar 
+                    los mejores momentos de sus eventos.
+                </p>
+                <div class="mt-10 flex items-center justify-center gap-x-6">
+                    <a href="#" class="rounded-md bg-white px-6 py-3 text-sm font-semibold text-blue-600 shadow-sm hover:bg-blue-50">
+                        Empezar gratis
+                    </a>
+                    <a href="#" class="text-sm font-semibold leading-6 text-white">
+                        Ver demo →
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="text-center">
+            <p>© 2025 Comparty. Todos los derechos reservados.</p>
+            <p class="mt-2 text-sm text-gray-400">Potenciado por OpenAI GPT-4 y PayPal</p>
+        </div>
+    </footer>
+</body>
+</html>

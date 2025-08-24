@@ -1,0 +1,260 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  HOST
+  STAFF
+}
+
+enum EventType {
+  WEDDING
+  QUINCEANERA
+  BAPTISM
+  OTHER
+}
+
+enum EventStatus {
+  PENDING_PAYMENT
+  ACTIVE
+  UPLOAD_CLOSED
+  EXPIRED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+  CANCELLED
+}
+
+enum PaymentType {
+  ONE_TIME
+  SUBSCRIPTION
+}
+
+enum PlanTier {
+  FREE
+  P50
+  P100
+  P200
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String?
+  role      UserRole @default(HOST)
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  events Event[]
+  auditLogs AuditLog[]
+}
+
+model Event {
+  id                 String      @id @default(cuid())
+  userId             String
+  name               String
+  type               EventType
+  date               DateTime
+  coverImageUrl      String?
+  planTier           PlanTier
+  uploadWindowEnd    DateTime
+  albumExpiresAt     DateTime
+  publicSlug         String      @unique
+  status             EventStatus @default(PENDING_PAYMENT)
+  maxInvites         Int
+  albumMonths        Int
+  uploadWindowDays   Int
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+  
+  user         User          @relation(fields: [userId], references: [id])
+  invitations  Invitation[]
+  uploads      Upload[]
+  selections   Selection[]
+  payments     Payment[]
+  extensions   Extension[]
+  
+  @@index([userId])
+  @@index([publicSlug])
+  @@index([status])
+}
+
+model Invitation {
+  id           String    @id @default(cuid())
+  eventId      String
+  email        String
+  uploaderId   String    @unique
+  tokenHash    String    @unique
+  tokenExpiry  DateTime
+  acceptedAt   DateTime?
+  name         String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  
+  event    Event      @relation(fields: [eventId], references: [id])
+  uploads  Upload[]
+  selections Selection[]
+  
+  @@index([eventId])
+  @@index([tokenHash])
+  @@index([uploaderId])
+}
+
+model Upload {
+  id              String   @id @default(cuid())
+  eventId         String
+  uploaderId      String
+  invitationId    String
+  objectKeyRaw    String
+  objectKeyThumb  String?
+  objectKeyPublic String?
+  width           Int?
+  height          Int?
+  fileSize        Int
+  mimeType        String
+  originalName    String
+  isPublic        Boolean  @default(false)
+  isDuplicate     Boolean  @default(false)
+  duplicateOfId   String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  event       Event        @relation(fields: [eventId], references: [id])
+  invitation  Invitation   @relation(fields: [invitationId], references: [id])
+  photoScore  PhotoScore?
+  selections  Selection[]
+  duplicateOf Upload?      @relation("DuplicateRelation", fields: [duplicateOfId], references: [id])
+  duplicates  Upload[]     @relation("DuplicateRelation")
+  
+  @@index([eventId])
+  @@index([uploaderId])
+  @@index([invitationId])
+  @@index([isDuplicate])
+}
+
+model PhotoScore {
+  id                String   @id @default(cuid())
+  uploadId          String   @unique
+  blurScore         Float    @default(0)
+  exposureScore     Float    @default(0)
+  facesDetected     Int      @default(0)
+  eyesOpenScore     Float    @default(0)
+  noiseScore        Float    @default(0)
+  aiAestheticScore  Float?
+  aiContextScore    Float?
+  qualityScore      Float    @default(0)
+  metadata          Json?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  upload Upload @relation(fields: [uploadId], references: [id], onDelete: Cascade)
+  
+  @@index([qualityScore])
+}
+
+model Selection {
+  id              String   @id @default(cuid())
+  eventId         String
+  uploaderId      String
+  invitationId    String
+  uploadId        String
+  isPinnedByHost  Boolean  @default(false)
+  rank            Int
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  event      Event      @relation(fields: [eventId], references: [id])
+  invitation Invitation @relation(fields: [invitationId], references: [id])
+  upload     Upload     @relation(fields: [uploadId], references: [id])
+  
+  @@unique([eventId, uploaderId, rank])
+  @@index([eventId])
+  @@index([uploaderId])
+}
+
+model Plan {
+  id               String  @id @default(cuid())
+  code             String  @unique
+  name             String
+  priceOnce        Float
+  maxInvites       Int
+  albumMonths      Int
+  uploadWindowDays Int
+  extensionPrice   Float   @default(10)
+  features         Json?
+  isActive         Boolean @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  
+  payments Payment[]
+}
+
+model Payment {
+  id           String        @id @default(cuid())
+  eventId      String
+  planCode     String
+  provider     String        @default("paypal")
+  type         PaymentType
+  providerRef  String        @unique
+  status       PaymentStatus @default(PENDING)
+  amount       Float
+  currency     String        @default("USD")
+  metadata     Json?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  
+  event Event @relation(fields: [eventId], references: [id])
+  plan  Plan  @relation(fields: [planCode], references: [code])
+  
+  @@index([eventId])
+  @@index([providerRef])
+  @@index([status])
+}
+
+model Extension {
+  id           String        @id @default(cuid())
+  eventId      String
+  months       Int
+  amount       Float
+  providerRef  String        @unique
+  status       PaymentStatus @default(PENDING)
+  startsAt     DateTime
+  endsAt       DateTime
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  
+  event Event @relation(fields: [eventId], references: [id])
+  
+  @@index([eventId])
+  @@index([providerRef])
+  @@index([status])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String?
+  action    String
+  entity    String
+  entityId  String?
+  metadata  Json?
+  ipAddress String?
+  userAgent String?
+  timestamp DateTime @default(now())
+  
+  actor User? @relation(fields: [actorId], references: [id])
+  
+  @@index([actorId])
+  @@index([entity])
+  @@index([timestamp])
+}
