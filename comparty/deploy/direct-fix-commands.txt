@@ -1,0 +1,138 @@
+# Run these commands directly on the server:
+
+cd /home/comparty/app
+
+# 1. Install missing dependencies
+sudo -u comparty npm install jsonwebtoken bcryptjs
+
+# 2. Create the registration fix script
+cat > /tmp/fix-registration.sh << 'EOF'
+#!/bin/bash
+
+cd /home/comparty/app
+
+echo "Fixing registration endpoint..."
+
+# Create simplified registration endpoint
+cat > /home/comparty/app/src/app/api/auth/register/route.ts << 'ENDFILE'
+import { NextRequest, NextResponse } from 'next/server';
+import bcrypt from 'bcryptjs';
+import { db } from '@/lib/db';
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { email, password, name } = body;
+
+    // Validate
+    if (!email || !password || !name) {
+      return NextResponse.json(
+        { success: false, error: 'Todos los campos son requeridos' },
+        { status: 400 }
+      );
+    }
+
+    // Check existing
+    const existingUser = await db.user.findUnique({
+      where: { email }
+    });
+
+    if (existingUser) {
+      return NextResponse.json(
+        { success: false, error: 'El usuario ya existe' },
+        { status: 400 }
+      );
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create user
+    const user = await db.user.create({
+      data: {
+        email,
+        password: hashedPassword,
+        name
+      }
+    });
+
+    // Return success
+    return NextResponse.json({
+      success: true,
+      message: 'Usuario creado exitosamente'
+    });
+
+  } catch (error: any) {
+    console.error('Registration error:', error);
+    return NextResponse.json(
+      { success: false, error: 'Error al crear usuario' },
+      { status: 500 }
+    );
+  }
+}
+ENDFILE
+
+# Create login endpoint
+cat > /home/comparty/app/src/app/api/auth/login/route.ts << 'ENDFILE'
+import { NextRequest, NextResponse } from 'next/server';
+import bcrypt from 'bcryptjs';
+import { db } from '@/lib/db';
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { email, password } = body;
+
+    const user = await db.user.findUnique({
+      where: { email }
+    });
+
+    if (!user || !user.password) {
+      return NextResponse.json(
+        { success: false, error: 'Credenciales inválidas' },
+        { status: 401 }
+      );
+    }
+
+    const isValid = await bcrypt.compare(password, user.password);
+
+    if (!isValid) {
+      return NextResponse.json(
+        { success: false, error: 'Credenciales inválidas' },
+        { status: 401 }
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      token: 'temp-' + user.id,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name
+      }
+    });
+  } catch (error) {
+    console.error('Login error:', error);
+    return NextResponse.json(
+      { success: false, error: 'Error al iniciar sesión' },
+      { status: 500 }
+    );
+  }
+}
+ENDFILE
+
+# Generate Prisma
+sudo -u comparty npx prisma generate
+sudo -u comparty npx prisma db push
+
+# Build
+sudo -u comparty npm run build
+
+# Restart
+sudo -u comparty pm2 restart comparty
+EOF
+
+# 3. Run the fix
+chmod +x /tmp/fix-registration.sh
+bash /tmp/fix-registration.sh
