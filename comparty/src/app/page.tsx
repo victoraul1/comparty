@@ -77,7 +77,7 @@ export default function Home() {
                 </dt>
                 <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
                   <p className="flex-auto">
-                    Send a simple link to your guests. They don't need to register, 
+                    Send a simple link to your guests. They don&apos;t need to register, 
                     just upload their photos during the time window you define.
                   </p>
                 </dd>
